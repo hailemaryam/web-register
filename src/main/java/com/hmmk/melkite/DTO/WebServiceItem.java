@@ -1,4 +1,4 @@
-package com.hmmk.melkite;
+package com.hmmk.melkite.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,9 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SubUnSubItem {
+public class WebServiceItem {
     private String id;
     private String phone;
+    private String websiteRegisteredId;
     private String generatedPassword;
     private String serviceId;
     private String productId;
@@ -27,5 +28,4 @@ public class SubUnSubItem {
     private String webPayloadNoticeCharging;
     private String webHeaderName;
     private String webHeaderValue;
-    private String websiteUserId;
 }
