@@ -1,5 +1,6 @@
 package com.hmmk.melkite.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -11,6 +12,7 @@ public class WebConfigItem  extends PanacheEntityBase {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @JsonIgnore
     public String id;
     public String serviceId;
     public String productId;
