@@ -1,0 +1,20 @@
+create table WebConfigItem (
+    id varchar(255) not null,
+    productId varchar(255),
+    serviceId varchar(255),
+    webHeaderName varchar(255),
+    webHeaderValue varchar(255),
+    webMethodDelete varchar(255),
+    webMethodNoticeCharging varchar(255),
+    webMethodRegister varchar(255),
+    webPayloadDelete varchar(255),
+    webPayloadNoticeCharging varchar(255),
+    webPayloadRegister varchar(255),
+    webQueryParamDelete varchar(255),
+    webQueryParamNoticeCharging varchar(255),
+    webQueryParamRegister varchar(255),
+    webUrlDelete varchar(255),
+    webUrlNoticeCharging varchar(255),
+    webUrlRegister varchar(255),
+    primary key (id)
+) engine=InnoDB;
