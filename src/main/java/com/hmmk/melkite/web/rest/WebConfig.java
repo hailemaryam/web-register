@@ -27,7 +27,6 @@ public class WebConfig {
     }
 
     @POST
-    @Path("get-web-config")
     @Consumes("application/json")
     @Produces("application/json")
     public RestResponse<WebConfigItem> createOrUpdate( WebConfigItem webConfigItem){

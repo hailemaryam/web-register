@@ -13,4 +13,5 @@ public class WebServiceQueueItem {
     private String generatedPassword;
     private String serviceId;
     private String productId;
+    private String updateType;
 }

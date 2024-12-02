@@ -3,7 +3,11 @@ package com.hmmk.melkite.Entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.util.Date;
 
 @Entity
 @Table(name = "WebConfigItem")
@@ -30,4 +34,9 @@ public class WebConfigItem  extends PanacheEntityBase {
     public String webPayloadNoticeCharging;
     public String webHeaderName;
     public String webHeaderValue;
+    @CreationTimestamp
+    public Date dateCreated;
+    @UpdateTimestamp
+    public Date dateUpdated;
+
 }
