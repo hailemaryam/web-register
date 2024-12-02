@@ -3,8 +3,10 @@ package com.hmmk.melkite.Service;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hmmk.melkite.DAO.WebRegisteredIdTableDao;
 import com.hmmk.melkite.DTO.WebServiceItem;
 import com.hmmk.melkite.DTO.WebServiceQueueItem;
+import com.hmmk.melkite.Entity.WebRegisteredIdTable;
 import io.smallrye.reactive.messaging.annotations.Blocking;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -37,36 +39,38 @@ public class WebRegisterService {
     RegisterToWebsite registerToWebsite;
 
     @Inject
-    @Channel("website-registered-id")
-    Emitter<WebServiceQueueItem> emitWebsiteRegisteredId;
+    WebRegisteredIdTableDao webRegisteredIdTableDao;
 
-
-    @Incoming("subscriber")
+    @Incoming("sdp-notify-web-register")
     @Blocking
     public void registerWebServiceItem(WebServiceQueueItem webServiceQueueItem) {
-        WebServiceItem webServiceItem = queueItemToWebServiceConvertor.convert(webServiceQueueItem);
-        try {
-            HttpResponse response = registerToWebsite.registerUser(webServiceItem);
-            handleWebRegistrationId(webServiceQueueItem, response);
-        } catch (Exception e) {
-            // todo handle this exception using logger and tenant problem notifier
-            throw new RuntimeException(e);
+        if (webServiceQueueItem.getUpdateType().equalsIgnoreCase("ok")){
+            WebServiceItem webServiceItem = queueItemToWebServiceConvertor.convert(webServiceQueueItem);
+            try {
+                HttpResponse response = registerToWebsite.registerUser(webServiceItem);
+                handleWebRegistrationId(webServiceQueueItem, response);
+            } catch (Exception e) {
+                // todo handle this exception using logger and tenant problem notifier
+                throw new RuntimeException(e);
+            }
+        } else {
+            WebServiceItem webServiceItem = queueItemToWebServiceConvertor.convert(webServiceQueueItem);
+            try {
+                String webRegisteredId = "";
+                WebRegisteredIdTable byServiceIdAndProductId = webRegisteredIdTableDao.findByServiceIdAndProductId(webServiceQueueItem);
+                if (byServiceIdAndProductId != null){
+                    webRegisteredId = byServiceIdAndProductId.webRegisteredId;
+                }
+                webServiceQueueItem.setWebsiteRegisteredId(webRegisteredId);
+                registerToWebsite.deleteUser(webServiceItem);
+            } catch (Exception e) {
+                // todo handle this exception using logger and tenant problem notifier
+                throw new RuntimeException(e);
+            }
         }
     }
 
-    @Incoming("un-subscriber")
-    @Blocking
-    public void deleteWebServiceItem(WebServiceQueueItem webServiceQueueItem) {
-        WebServiceItem webServiceItem = queueItemToWebServiceConvertor.convert(webServiceQueueItem);
-        try {
-            registerToWebsite.deleteUser(webServiceItem);
-        } catch (Exception e) {
-            // todo handle this exception using logger and tenant problem notifier
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Incoming("charging-notice")
+    @Incoming("charging-notice-web-register")
     @Blocking
     public void noticeCharging(WebServiceQueueItem webServiceQueueItem) {
         WebServiceItem webServiceItem = queueItemToWebServiceConvertor.convert(webServiceQueueItem);
@@ -90,7 +94,7 @@ public class WebRegisterService {
             map.forEach((s, o) -> System.out.println(o));
             if (map.get("id") != null){
                 webServiceQueueItem.setWebsiteRegisteredId(map.get("id").toString());
-                emitWebsiteRegisteredId.send(webServiceQueueItem);
+                webRegisteredIdTableDao.createOrUpdate(webServiceQueueItem);
             }
         } catch (JsonParseException ignored){
 

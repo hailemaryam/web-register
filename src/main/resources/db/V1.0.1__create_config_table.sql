@@ -16,5 +16,7 @@ create table WebConfigItem (
     webUrlDelete varchar(255),
     webUrlNoticeCharging varchar(255),
     webUrlRegister varchar(255),
+    dateCreated datetime(6),
+    dateUpdated datetime(6),
     primary key (id)
 ) engine=InnoDB;
