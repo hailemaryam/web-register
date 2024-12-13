@@ -70,7 +70,7 @@ public class WebRegisterService {
         }
     }
 
-    @Incoming("charging-notice-web-register")
+    @Incoming("success-notifier-web-register")
     @Blocking
     public void noticeCharging(WebServiceQueueItem webServiceQueueItem) {
         WebServiceItem webServiceItem = queueItemToWebServiceConvertor.convert(webServiceQueueItem);
