@@ -28,6 +28,6 @@ public class WebRegisteredIdTableDao {
     }
     public WebRegisteredIdTable findByServiceIdAndProductId(WebServiceQueueItem webServiceQueueItem) {
         return WebRegisteredIdTable.find("serviceId = ?1 and productId = ?2 and phone = ?3", webServiceQueueItem.getServiceId(), webServiceQueueItem.getProductId(), webServiceQueueItem.getPhone()).firstResult();
-}
+    }
 
 }
