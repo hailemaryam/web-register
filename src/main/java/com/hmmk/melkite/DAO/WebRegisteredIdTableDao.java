@@ -1,7 +1,6 @@
 package com.hmmk.melkite.DAO;
 
 import com.hmmk.melkite.DTO.WebServiceQueueItem;
-import com.hmmk.melkite.Entity.WebConfigItem;
 import com.hmmk.melkite.Entity.WebRegisteredIdTable;
 import jakarta.enterprise.context.ApplicationScoped;
 
