@@ -56,12 +56,10 @@ public class WebRegisterService {
         } else {
             WebServiceItem webServiceItem = queueItemToWebServiceConvertor.convert(webServiceQueueItem);
             try {
-                String webRegisteredId = "";
                 WebRegisteredIdTable byServiceIdAndProductId = webRegisteredIdTableDao.findByServiceIdAndProductId(webServiceQueueItem);
                 if (byServiceIdAndProductId != null){
-                    webRegisteredId = byServiceIdAndProductId.webRegisteredId;
+                    webServiceItem.setWebsiteRegisteredId(byServiceIdAndProductId.webRegisteredId);
                 }
-                webServiceQueueItem.setWebsiteRegisteredId(webRegisteredId);
                 registerToWebsite.deleteUser(webServiceItem);
             } catch (Exception e) {
                 // todo handle this exception using logger and tenant problem notifier
