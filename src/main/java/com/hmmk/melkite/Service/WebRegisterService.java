@@ -44,8 +44,9 @@ public class WebRegisterService {
     @Incoming("sdp-notify-web-register")
     @Blocking
     public void registerWebServiceItem(WebServiceQueueItem webServiceQueueItem) {
+        WebServiceItem webServiceItem = queueItemToWebServiceConvertor.convert(webServiceQueueItem);
+        if (webServiceItem == null) return;
         if (webServiceQueueItem.getUpdateType().equalsIgnoreCase("ok")){
-            WebServiceItem webServiceItem = queueItemToWebServiceConvertor.convert(webServiceQueueItem);
             try {
                 HttpResponse response = registerToWebsite.registerUser(webServiceItem);
                 handleWebRegistrationId(webServiceQueueItem, response);
@@ -54,7 +55,6 @@ public class WebRegisterService {
                 throw new RuntimeException(e);
             }
         } else {
-            WebServiceItem webServiceItem = queueItemToWebServiceConvertor.convert(webServiceQueueItem);
             try {
                 WebRegisteredIdTable byServiceIdAndProductId = webRegisteredIdTableDao.findByServiceIdAndProductId(webServiceQueueItem);
                 if (byServiceIdAndProductId != null){
@@ -72,6 +72,7 @@ public class WebRegisterService {
     @Blocking
     public void noticeCharging(WebServiceQueueItem webServiceQueueItem) {
         WebServiceItem webServiceItem = queueItemToWebServiceConvertor.convert(webServiceQueueItem);
+        if (webServiceItem == null) return;
         try {
             registerToWebsite.successFullChargingNotice(webServiceItem);
         } catch (Exception e) {
